@@ -17,11 +17,11 @@ const {user,isSignedIn} = useUser();
   return (
     <div className='flex justify-between 
     items-center  
-    md:px-20 shadow-sm'>
+    md:px-20 shadow-sm mr-50'>
       <Image src='/logo.png' 
       alt="logo" 
-      width={200} 
-      height={200}/>
+      width={80} 
+      height={80}/>
 
       <div className='hidden md:flex border p-2 rounded-lg bg-gray-200 w-96'>
         <input type="text" className='bg-transparent w-full outline-none'/>
