@@ -36,6 +36,7 @@ function CategoryList () {
   }
   return (
     <div className='mt-10 relative'>
+      {/* IF YOU WANT TO HIDE THE SCROLL BAR ADD THIS CLASS overflow-auto,SCROLLBAR-HIDDEN */}
       <div className='flex gap-4 overflow-auto' ref={listRef}>
         {categoryList&&categoryList.map((category,index)=>(
           <Link href={'?category='+category.slug} key={index} 
