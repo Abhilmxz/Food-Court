@@ -1,11 +1,16 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+
+
+// BANNER SECTION AND RESTAURANT LIST AND REVIEWS
+
+
+//BANNER IMAGE API CALLING
 
 function BusinessItem  ({business}) {
   return (
-    <div className='p-3 hover:border rounded-xl 
-    cursor-pointer hover:border-primary 
-     hover:bg-orange-50'>
+    <Link href={'/restaurant/'+ business?.slug} className='p-3 hover:border rounded-xl cursor-pointer hover:border-primary hover:bg-orange-50'>
       <Image src={business.banner?.url} alt={business.name} 
       width={500} 
       height={130}
@@ -13,6 +18,9 @@ function BusinessItem  ({business}) {
       <div className='mt-2'>
         <h2 className='font-bold text-lg'>{business.name}</h2>
 
+
+      
+{/* BANNER REVIEWS AND RATINGS */}
         <div className='flex justify-between items-center'>
             <div className='flex gap-2 items-center'>
               <Image src="/public/star.png" alt="star" width={14} height={14}/>  
@@ -22,7 +30,7 @@ function BusinessItem  ({business}) {
             <h2 className='text-primary text-sm'>{business.categories[0].name}</h2>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
