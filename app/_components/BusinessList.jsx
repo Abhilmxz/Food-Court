@@ -15,6 +15,8 @@ function BusinessList () {
         params&&getBusinessList(params.get('category'));
     },[params])
  
+    
+    //GLOBAL API CALL AND SET SKELTON LOADING HEAD SECTION
     const getBusinessList=(category_)=>{
         setLoading(true);
         GlobalApi.GetBusiness(category_).then(resp=>{
@@ -35,6 +37,7 @@ function BusinessList () {
            business={restaurants}/>
           </div>
         )):
+        //ADD LOADING BOX NUMBERS
         [1,2,3,4,5,6,7,8].map((item,index)=>(
           <BusinessItemSkelton/>
         ))

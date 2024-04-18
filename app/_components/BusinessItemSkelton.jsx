@@ -1,5 +1,6 @@
 import React from 'react'
 
+// SKELTON LOADING EFFECT LAYOUT
 function BusinessItemSkelton() {
   return (
     <div>
