@@ -1,18 +1,35 @@
 "use client";
 import Image from 'next/image';
-import React from 'react';
-import {Search} from 'lucide-react';
+import React, {useState, useEffect,useContext } from 'react';
+import {Search, ShoppingCart} from 'lucide-react';
 import {SignInButton} from '@clerk/nextjs';
 import{SignUpButton} from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import { UserButton } from '@clerk/nextjs';
 import { useUser } from '@clerk/nextjs';
+import { CartUpdateContext } from '@/app/_context/CartUpdateContext';
+import GlobalApi from '../_utils/GlobalApi';
+
 
 function Header() {
 
 const {user,isSignedIn} = useUser();
+const {updateCart,setUpdateCart}=useContext(CartUpdateContext);
+const [cart,setCart]=useState([]);
 
+useEffect(()=>{
+  console.log("Execute Me!");
+  user&&GetUserCart()
+},[updateCart&&user])
 
+// adding cart details view in email
+
+const GetUserCart=()=>{
+  GlobalApi.GetUserCart(user?.primaryEmailAddress?.emailAddress).then(resp=>{
+    console.log(resp)
+    setCart(resp?.userCarts);
+  })
+}
 
   return (
     <div className='flex justify-between 
@@ -30,7 +47,14 @@ const {user,isSignedIn} = useUser();
 
 
       {isSignedIn?
+      // adding cart and user button
+      <div className='flex gap-3 items-center'>
+        <div className='flex gap-2 items-center'>
+      <ShoppingCart/>
+      <label className='p-1 px-3 rounded-full bg-slate-200'>{cart?.length}</label>
+      </div>
       <UserButton/>
+      </div>
       :<div className='flex gap-5'>
         <SignInButton mode='modal'>
 

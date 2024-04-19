@@ -1,14 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Image from 'next/image'
 import {Button} from '@/components/ui/button'
 import { useState } from 'react'
 import { SquarePlus } from 'lucide-react';
+import { useUser } from '@clerk/nextjs';
+import GlobalApi from '@/app/_utils/GlobalApi';
+import { toast } from 'sonner';
+import { CartUpdateContext } from '@/app/_context/CartUpdateContext';
 
 function MenuSection({restaurant}) {
 
   // storing menu fillter variable
   const [menuItemList,setMenuItemList] =useState([]);
 
+  // adding user email to cart
+  const {user}=useUser();
+  // context cart updation function adding to cart
+  const {updateCart, setUpdateCart}=useContext(CartUpdateContext)
   // adding menu fillter
 
   useEffect(()=>{
@@ -17,6 +25,27 @@ function MenuSection({restaurant}) {
   const FilterMenu=(category)=>{
     const result=restaurant?.menu?.filter((item)=>item.category==category)
     setMenuItemList(result[0])
+  }
+
+  // Adding to cart fuction and details view
+  const addToCartHandler=(item)=>{
+    toast('Adding to cart')
+    const data={
+      email:user?.primaryEmailAddress?.emailAddress,
+      name:item?.name,
+      description:item?.description,
+      productImage:item?.productImage?.url,
+      price:item?.price,
+      restaurantSlug:restaurant?.slug,
+    }
+    GlobalApi.AddToCart(data).then(resp=>{
+      console.log(resp);
+      // context function using to tost
+      setUpdateCart(!updateCart);
+      toast('Added to cart');
+    },(error)=>{
+      toast('Error While adding into the cart');
+    })
   }
 
   return (
@@ -44,7 +73,7 @@ function MenuSection({restaurant}) {
                     <h2 className='font-bold'>{item.name}</h2>
                     <h2>${item.price}</h2>
                     <h2 className='text-gray-400 text-sm line-clamp-2'>{item.description}</h2>
-                    <SquarePlus/>
+                    <SquarePlus className='cursor-pointer' onClick={()=>addToCartHandler(item)}/>
                   </div>
                 </div>
               ))}
