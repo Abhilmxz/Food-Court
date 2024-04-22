@@ -82,7 +82,8 @@ const addToOrder=()=>{
         .then(result=>{
           console.log(result);
           setLoading(false)
-          toast('Order Placed Successfully!')
+          toast('Order Placed Successfully!');
+          setUpdateCart(!updateCart);
         },(error)=>{
           setLoading(false)
         })
