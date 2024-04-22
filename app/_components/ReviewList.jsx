@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from 'next/image'
 import React from 'react'
 import { Rating as ReactRating } from '@smastrom/react-rating'
 import moments from 'moment'
@@ -6,7 +6,7 @@ import moments from 'moment'
 function ReviewList({reviewList}) {
   return (
     <div className='flex flex-col gap-5'>
-      {!reviewList?reviewList.map((review,index)=>(
+      {reviewList?reviewList.map((review,index)=>(
           <div key={index} className='flex gap-5 items-center border rounded-lg p-5'>
             <Image src={review.profileImage} 
             alt={'profileImage'} 
