@@ -214,6 +214,79 @@ const GetUserCart=async(userEmail)=>{
       return result;
   }
 
+  // Calling order api from hygraph
+  const CreateNewOrder=async(data)=>{
+    const query=gql`
+    mutation CreateNewOrder {
+      createOrder(
+        data: {email: "`+data.email+`", 
+        orderAmount: `+data.orderAmount+`, 
+        restaurantName: "`+data.restaurantName+`", 
+        userName: "`+data.userName+`", 
+        phone: "`+data.phone+`", 
+        address: "`+data.address+`", 
+        zipCode: "`+data.zipCode+`"}
+      ) {
+        id
+      }
+    }
+    `
+    const result=await request(MASTER_URL,query);
+    return result;
+  }
+
+  const UpdateOrderToAddOrderItems=async(name,price,id,email)=>{
+    const query=gql`
+    mutation UpdateOrderWithDetail {
+      updateOrder(
+        data: {orderDetail: {create: {OrderItem: 
+          {data: {name: "`+name+`", price: `+price+`}}}}}
+        where: {id: "`+id+`"}
+      ) {
+        id
+      }
+      publishManyOrders(to: PUBLISHED) {
+        count
+      }
+     
+        deleteManyUserCarts(where: {email: "`+email+`"}) {
+          count
+        }
+         
+    }
+    `
+    const result=await request(MASTER_URL,query);
+    return result;
+  }
+
+  // const GetUserOrders=async(email)=>{
+  //   const query=gql`
+  //   query UserOrders {
+  //     orders(where: {email: "`+email+`"},orderBy: publishedAt_DESC) {
+  //       address
+  //       createdAt
+  //       email
+  //       id
+  //       orderAmount
+  //       orderDetail {
+  //         ... on OrderItem {
+  //           id
+  //           name
+  //           price
+  //         }
+  //       }
+  //       phone
+  //       restaurantName
+  //       userName
+  //       zipCode
+  //     }
+  //   }
+  //   `
+  //   const result=await request(MASTER_URL,query);
+  //   return result;
+  // }
+  
+
 export default{
     GetCategory,
     GetBusiness,
@@ -224,4 +297,7 @@ export default{
     DeleteItemFromCart,
     AddNewReview,
     getRestaurantReviews,
+    CreateNewOrder,
+    UpdateOrderToAddOrderItems,
+    // GetUserOrders,
 };

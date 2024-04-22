@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { useUser } from '@clerk/nextjs';
 import { CartUpdateContext } from '@/app/_context/CartUpdateContext';
 import { Button } from '@/components/ui/button';
+import { Loader } from 'lucide-react';
+import { toast } from 'sonner';
 
 function Checkout() {
   const params=useSearchParams();
@@ -23,6 +25,8 @@ function Checkout() {
   const [phone,setPhone]=useState();
   const [zip,setZip]=useState();
   const [address,setAddress]=useState();
+  const [loading,setLoading]=useState(false);
+  // const router=useRouter();
 
 
 
@@ -59,7 +63,34 @@ const calculateTotalAmount=(cart_)=>{
 
 // Order creating button
 const addToOrder=()=>{
-  
+  setLoading(true);
+  const data={
+    email:user.primaryEmailAddress.emailAddress,
+    orderAmount:total,
+    restaurantName:params.get('restaurant'),
+    userName:user.fullName,
+    phone:phone,
+    address:address,
+    zipCode:zip,
+  }
+  GlobalApi.CreateNewOrder(data).then(resp=>{
+    const resultId=resp?.createOrder?.id;
+    if(resultId)
+    {
+      cart.forEach((item)=>{
+        GlobalApi.UpdateOrderToAddOrderItems(item.productName,item.price,resultId,user?.primaryEmailAddress.emailAddress)
+        .then(result=>{
+          console.log(result);
+          setLoading(false)
+          toast('Order Placed Successfully!')
+        },(error)=>{
+          setLoading(false)
+        })
+      })
+    }
+  },(error)=>{
+    setLoading(false)
+  })
 }
 
   return (
@@ -93,7 +124,8 @@ const addToOrder=()=>{
                 
               {/* ADDING A BUTTON */}
               {/* <Button onClick={()=>onApprove({paymentId:123})}>Payment <ArrowBigRight/> </Button> */}
-              <Button onClick={()=>addToOrder()}>Make Payment</Button>
+              <Button onClick={()=>addToOrder()}>
+                {loading?<Loader className='animate-spin'/>:'Make Payment'}</Button>
       </div>
       </div>
       </div>
