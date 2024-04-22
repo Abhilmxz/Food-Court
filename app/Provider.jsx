@@ -10,7 +10,7 @@ function Provider({children}) {
   return (
     // cart update context from anywhere
         <CartUpdateContext.Provider value={{updateCart, setUpdateCart}}>
-    <div className='px-10 md:px-20 relative'>
+    <div className='px-10 md:px-20 relative mb-20'>
         <Header />
         <Toaster />
       {children}

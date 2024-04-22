@@ -16,7 +16,7 @@ function RestaurantDetails() {
         GetRestaurantDetail(param.split("/")[2])   
     },[])
     const GetRestaurantDetail=(restroSlug)=>{
-    GlobalApi.GetBusinessDetails(restroSlug).then(resp=>{
+    GlobalApi.GetBusinessDetail(restroSlug).then(resp=>{
         console.log(resp)
         setRestaurant(resp.restaurant);
     })

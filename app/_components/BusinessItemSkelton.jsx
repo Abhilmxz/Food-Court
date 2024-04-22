@@ -8,7 +8,7 @@ function BusinessItemSkelton() {
       rounded-xl animate-pulse'>
      </div>
       <div className='w-full h-5 bg-slate-200 rounded-md mt-3 animate-pulse'></div>
-      Eda Mone...💥💥
+      Wait a sec...
     </div>
   )
 }

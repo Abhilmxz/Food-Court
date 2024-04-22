@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Image from 'next/image'
 import { X } from 'lucide-react'
 import {Button} from '@/components/ui/button'
 import GlobalApi from '@/app/_utils/GlobalApi';
 import { toast } from 'sonner';
+import { CartUpdateContext } from '@/app/_context/CartUpdateContext';
+import Link from 'next/link';
+
 
 function Cart({ cart }) {
+  const {updateCart,setUpdateCart}=useContext(CartUpdateContext)
 // fuction of cart total amount calculation function
     const CalculateCartAmount=()=>{
         let total=0;
@@ -17,12 +21,13 @@ function Cart({ cart }) {
 
     const RemoveItemFromCart=(id)=>{
         GlobalApi.DisconnectRestroFromUserCartItem(id).then(resp=>{
-            console.log(resp);
+            console.log(resp,"-----DisconnectRestroFromUserCartItem");
             if(resp)
             {
               GlobalApi.DeleteItemFromCart(id).then(resp=>{
                 console.log(resp);  
                 toast('Item Removed!')
+                setUpdateCart(!updateCart)
               })  
             }
         })
@@ -48,7 +53,9 @@ function Cart({ cart }) {
            </div>
         ))}
         {/* adding checkout button and total amount */}
-        <Button>Checkout ${CalculateCartAmount()}</Button>
+        <Link href={'/checkout?restaurant='+cart[0]?.restaurant?.name} className='w-full'>
+        <Button className='w-full'>Checkout ${CalculateCartAmount()}</Button>
+        </Link>
       </div>
     </div>
   )

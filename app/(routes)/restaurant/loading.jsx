@@ -4,7 +4,7 @@ import React from 'react'
 function loading() {
   return (
     <div>
-      Eda Mone...
+      wait a sec...
     </div>
   )
 }

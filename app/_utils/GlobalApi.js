@@ -26,31 +26,31 @@ const GetCategory=async()=>{
 
 //ADDING RESTAURANT LIST AND DETAILS
 const GetBusiness=async(category)=>{
-    const query=gql`
-    query GetBusiness {
-      restaurants(where: {categories_some: {slug: "`+category+`"}}) {
-        aboutUs
-        address
-        banner {
-          url
-        }
-        categories {
-          name
-        }
-        id
-        name
-        restroType
-        slug
-        workingHours
+  const query=gql`
+  query GetBusiness {
+    restaurants(where: {categories_some: {slug: "`+category+`"}}) {
+      aboutUs
+      address
+      banner {
+        url
       }
+      categories {
+        name
+      }
+      id
+      name
+      restroType
+      slug
+      workingHours
     }
-    `
-    const result=await request(MASTER_URL,query);
+  }  
+  `
+    const result =await request(MASTER_URL,query);
       return result;
 }
 
 //RESTAURANT DETAILS
-const GetBusinessDetails=async(businessSlug)=>{
+const GetBusinessDetail=async(businessSlug)=>{
     const query=gql`
     query RestaurantDetail {
       restaurant(where: {slug: "`+businessSlug+`"}) {
@@ -156,14 +156,60 @@ const GetUserCart=async(userEmail)=>{
   // adding deletation Api
 
   const DeleteItemFromCart=async(id)=>{
+    console.log(id,"[[[[[[[[[id---DeleteItemFromCart")
     const query=gql`
     mutation DeleteCartItem {
-      deleteUserCart(where: {id: "`+id+`"}) {
+      deleteUserCart(where: {id: "${id}"}) 
+      {
         id
       }
     }
     `
+// A issue showing on this line
+    const result=await request(MASTER_URL,query);
+      return result;
+  }
 
+  // Adding review api from hygraph
+  const AddNewReview=async(data)=>{
+    const query=gql`
+    mutation AddNewReview {
+      createReview(
+        data: {email: "`+data.email+`", 
+        profileImage: "`+data.profileImage+`", 
+        reviewText: "`+data.reviewText+`", 
+        star: `+data.star+`, 
+        userName: "`+data.userName+`", 
+        restaurant: {connect: {slug: "`+data.RestroSlug+`"}}}
+      ) {
+        id
+      }
+      publishManyReviews(to: PUBLISHED) {
+        count
+      }
+    }
+    `
+    const result=await request(MASTER_URL,query);
+      return result;
+
+  }
+
+  // new api for review list viewing
+
+  const getRestaurantReviews=async(slug)=>{
+    const query=gql`
+    query RestaurantReviews {
+      reviews(where: {restaurant: {slug: "`+slug+`"}},orderBy: publishedAt_DESC) {
+        email
+        id
+        profileImage
+        publishedAt
+        userName
+        star
+        reviewText
+      }
+    }
+    `
     const result=await request(MASTER_URL,query);
       return result;
   }
@@ -171,9 +217,11 @@ const GetUserCart=async(userEmail)=>{
 export default{
     GetCategory,
     GetBusiness,
-    GetBusinessDetails,
+    GetBusinessDetail,
     AddToCart,
     GetUserCart,
     DisconnectRestroFromUserCartItem,
     DeleteItemFromCart,
+    AddNewReview,
+    getRestaurantReviews,
 };

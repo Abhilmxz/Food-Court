@@ -28,7 +28,7 @@ const [cart,setCart]=useState([]);
 useEffect(()=>{
   console.log("Execute Me!");
   user&&GetUserCart()
-},[updateCart&&user])
+},[updateCart||user])
 
 // adding cart details view in email
 
