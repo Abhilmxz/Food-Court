@@ -30,7 +30,7 @@ function BusinessItem  ({business}) {
   return (
 
     //hover bug on here
-    <Link href={'/restaurant/'+ business?.slug} className='p-3 hover:border rounded-xl cursor-pointer hover:border-primary hover:bg-orange-50'>
+    <Link href={'/restaurant/'+business?.slug} className='p-3 hover:border rounded-xl cursor-pointer hover:border-primary hover:bg-orange-50 block'>
       <Image src={business.banner?.url} alt={business.name} 
       width={500} 
       height={130}

@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import React, {useState, useEffect,useContext } from 'react';
 import {Search, ShoppingCart} from 'lucide-react';
-import {SignInButton} from '@clerk/nextjs';
+import {SignInButton, SignOutButton} from '@clerk/nextjs';
 import{SignUpButton} from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import { UserButton } from '@clerk/nextjs';
@@ -16,6 +16,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import Cart from './Cart';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 
 
 
@@ -68,7 +78,21 @@ const GetUserCart=()=>{
       </Popover>
 
       
-      <UserButton/>
+      {/* <UserButton/> */}
+      
+      <DropdownMenu>
+    <DropdownMenuTrigger>
+    <Image src={user?.imageUrl} alt='user' width={30} height={30} className='rounded-full'/>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent>
+    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <Link href={'/user'}> <DropdownMenuItem>Profile</DropdownMenuItem></Link>
+    <Link href={'/user#/my-orders'}><DropdownMenuItem>My Orders</DropdownMenuItem></Link>
+    <SignOutButton><DropdownMenuItem>Logout</DropdownMenuItem></SignOutButton>
+  </DropdownMenuContent>
+</DropdownMenu>
+
       </div>
       :<div className='flex gap-5'>
         <SignInButton mode='modal'>

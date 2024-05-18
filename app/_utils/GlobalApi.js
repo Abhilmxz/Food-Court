@@ -259,32 +259,32 @@ const GetUserCart=async(userEmail)=>{
     return result;
   }
 
-  // const GetUserOrders=async(email)=>{
-  //   const query=gql`
-  //   query UserOrders {
-  //     orders(where: {email: "`+email+`"},orderBy: publishedAt_DESC) {
-  //       address
-  //       createdAt
-  //       email
-  //       id
-  //       orderAmount
-  //       orderDetail {
-  //         ... on OrderItem {
-  //           id
-  //           name
-  //           price
-  //         }
-  //       }
-  //       phone
-  //       restaurantName
-  //       userName
-  //       zipCode
-  //     }
-  //   }
-  //   `
-  //   const result=await request(MASTER_URL,query);
-  //   return result;
-  // }
+  const GetUserOrders=async(email)=>{
+    const query=gql`
+    query UserOrders {
+      orders(where: {email: "`+email+`"},orderBy: publishedAt_DESC) {
+        address
+        createdAt
+        email
+        id
+        orderAmount
+        orderDetail {
+          ... on OrderItem {
+            id
+            name
+            price
+          }
+        }
+        phone
+        restaurantName
+        userName
+        zipCode
+      }
+    }
+    `
+    const result=await request(MASTER_URL,query);
+    return result;
+  }
   
 
 export default{
@@ -299,5 +299,5 @@ export default{
     getRestaurantReviews,
     CreateNewOrder,
     UpdateOrderToAddOrderItems,
-    // GetUserOrders,
+    GetUserOrders,
 };

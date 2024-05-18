@@ -8,6 +8,10 @@ import { CartUpdateContext } from '@/app/_context/CartUpdateContext';
 import { Button } from '@/components/ui/button';
 import { Loader } from 'lucide-react';
 import { toast } from 'sonner';
+import { PayPalButtons } from '@paypal/react-paypal-js';
+import { data } from 'autoprefixer';
+import { useRouter } from 'next/navigation';
+
 
 function Checkout() {
   const params=useSearchParams();
@@ -26,7 +30,7 @@ function Checkout() {
   const [zip,setZip]=useState();
   const [address,setAddress]=useState();
   const [loading,setLoading]=useState(false);
-  // const router=useRouter();
+  const router=useRouter();
 
 
 
@@ -84,6 +88,8 @@ const addToOrder=()=>{
           setLoading(false)
           toast('Order Placed Successfully!');
           setUpdateCart(!updateCart);
+          SendEmail();
+          router.replace('/confirmation');
         },(error)=>{
           setLoading(false)
         })
@@ -92,6 +98,31 @@ const addToOrder=()=>{
   },(error)=>{
     setLoading(false)
   })
+}
+
+
+const SendEmail=async()=>{
+  try{
+    const response=await fetch|('api/send-email',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        email:user?.primaryEmailAddress?.emailAddress
+      })
+    })
+
+    if(!response.ok){
+      toast('Something went wrong');
+    }
+    else{
+      toast('Email sent successfully');
+    }
+
+  }catch(error){
+    toast('Something went wrong');
+  }
 }
 
   return (
@@ -125,8 +156,23 @@ const addToOrder=()=>{
                 
               {/* ADDING A BUTTON */}
               {/* <Button onClick={()=>onApprove({paymentId:123})}>Payment <ArrowBigRight/> </Button> */}
-              <Button onClick={()=>addToOrder()}>
-                {loading?<Loader className='animate-spin'/>:'Make Payment'}</Button>
+              {/* <Button onClick={()=>addToOrder()}>
+                {loading?<Loader className='animate-spin'/>:'Make Payment'}</Button> */}
+              {total>5&&<PayPalButtons disabled={!(username&&email&&address&&zip)||loading} style={{ layout: "horizontal" }} 
+              onApprove={addToOrder}
+              createOrder={(data,actions)=>{
+                return actions.order.create({
+                  purchase_units:[
+                    {
+                      amount:{
+                        value:total.toFixed(2),
+                        currency_code:'USD'
+                      }
+                    }
+                  ]
+                })
+              }}
+              />}
       </div>
       </div>
       </div>
