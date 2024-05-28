@@ -3,6 +3,7 @@ import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import MenuSection from './MenuSection';
 import ReviewSection from '@/app/_components/ReviewSection';
+import AboutSection from '@/app/_components/AboutSection';
 
 
 function RestroTabs({restaurant}) {
@@ -15,7 +16,7 @@ function RestroTabs({restaurant}) {
     <TabsTrigger value="reviews">Reviews</TabsTrigger>
   </TabsList>
   <TabsContent value="category"><MenuSection restaurant={restaurant}/></TabsContent>
-  <TabsContent value="about">About</TabsContent>
+  <TabsContent value="about"><AboutSection restaurant={restaurant}/></TabsContent>
   <TabsContent value="reviews"><ReviewSection restaurant={restaurant}/></TabsContent>
 </Tabs>
 
